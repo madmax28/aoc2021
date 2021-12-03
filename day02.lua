@@ -1,4 +1,4 @@
-local util = require("util")
+local util = require("lib.util")
 
 local input = {}
 for dir, val in io.open("input/day02", "r"):read("*all"):gmatch("(%w+)%s(%d+)") do

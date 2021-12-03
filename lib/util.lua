@@ -1,13 +1,19 @@
 local util = {}
 
-function util.print_table(node)
+function util.tablelength (t)
+  local count = 0
+  for _ in pairs(t) do count = count + 1 end
+  return count
+end
+
+function util.print_table (node)
     local cache, stack, output = {},{},{}
     local depth = 1
     local output_str = "{\n"
 
     while true do
         local size = 0
-        for k,v in pairs(node) do
+        for _ in pairs(node) do
             size = size + 1
         end
 

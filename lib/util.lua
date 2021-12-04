@@ -85,4 +85,13 @@ function util.print_table (node)
     print(output_str)
 end
 
+function util.list_iter (list)
+    local i = 0
+    local n = #list
+    return function ()
+        i = i + 1
+        if i <= n then return list[i] else return nil end
+    end
+end
+
 return util

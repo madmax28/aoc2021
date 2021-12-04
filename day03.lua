@@ -48,8 +48,8 @@ local function most_common (nums, pos)
     end
 end
 
-local o2set = set.Set(nums)
-local co2set = set.Set(nums)
+local o2set = set:new(nums)
+local co2set = set:new(nums)
 local o2, co2
 for idx = 1, #diag do
     if not o2 then

@@ -3,11 +3,11 @@ local set = {}
 function set:new (list)
     list = list or {}
 
-    local set = {}
+    local set = { items = {} }
     setmetatable(set, self)
     self.__index = self
 
-    for _, entry in pairs(list) do set[entry] = true end
+    for _, entry in ipairs(list) do set.items[entry] = true end
     return set
 end
 

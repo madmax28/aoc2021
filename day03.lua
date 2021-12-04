@@ -53,15 +53,15 @@ local co2set = set:new(nums)
 local o2, co2
 for idx = 1, #diag do
     if not o2 then
-        local mc = most_common(o2set, idx)
-        for cand, _ in pairs(o2set) do
+        local mc = most_common(o2set.items, idx)
+        for cand, _ in pairs(o2set.items) do
             if cand:sub(idx, idx) ~= mc then
-                o2set[cand] = nil
+                o2set.items[cand] = nil
             end
         end
 
-        if util.tablelength(o2set) == 1 then
-            for res, _ in pairs(o2set) do
+        if util.tablelength(o2set.items) == 1 then
+            for res, _ in pairs(o2set.items) do
                 o2 = res
             end
         end
@@ -69,20 +69,20 @@ for idx = 1, #diag do
 
     if not co2 then
         local mc
-        if most_common(co2set, idx) == "1" then
+        if most_common(co2set.items, idx) == "1" then
             mc = "0"
         else
             mc = "1"
         end
 
-        for cand, _ in pairs(co2set) do
+        for cand, _ in pairs(co2set.items) do
             if cand:sub(idx, idx) ~= mc then
-                co2set[cand] = nil
+                co2set.items[cand] = nil
             end
         end
 
-        if util.tablelength(co2set) == 1 then
-            for res, _ in pairs(co2set) do
+        if util.tablelength(co2set.items) == 1 then
+            for res, _ in pairs(co2set.items) do
                 co2 = res
             end
         end

@@ -2,8 +2,8 @@ local iter = require "lib/iter"
 
 local Line = {}
 
-function Line:new (x1, y1, x2, y2)
-    local o = { x1 = x1, y1 = y1, x2 = x2, y2 = y2 }
+function Line:new (ps)
+    local o = { x1 = ps[1], y1 = ps[2], x2 = ps[3], y2 = ps[4] }
     setmetatable(o, self)
     self.__index = self
     return o
@@ -21,17 +21,17 @@ function Line:points ()
 
         if self.x1 == self.x2 then
             for y = self.y1, self.y2, stepy do
-                coroutine.yield({self.x1, y})
+                coroutine.yield(self.x1, y)
             end
         elseif self.y1 == self.y2 then
             for x = self.x1, self.x2, stepx do
-                coroutine.yield({x, self.y1})
+                coroutine.yield(x, self.y1)
             end
         else
             local cnt = math.abs(self.x1 - self.x2) + 1
             local x, y = self.x1, self.y1
             for _ = 1, cnt do
-                coroutine.yield({x, y})
+                coroutine.yield(x, y)
                 x, y = x + stepx, y + stepy
             end
         end
@@ -39,7 +39,7 @@ function Line:points ()
 end
 
 local lines = iter:new(io.open("input/day05"):lines()):map(function (line)
-    return Line:new(table.unpack(iter:new(line:gmatch("%d+")):map(tonumber):collect()))
+    return Line:new(iter:new(line:gmatch("%d+")):map(tonumber):collect())
 end):collect()
 
 local Map = {}
@@ -54,7 +54,7 @@ function Map:new ()
 end
 
 function Map:addLine (line)
-    for x, y in iter:new(line:points()):map(table.unpack) do
+    for x, y in iter:new(line:points()) do
         if not self.data[x] then self.data[x] = {} end
 
         if self.data[x][y] then

@@ -61,4 +61,10 @@ function iter:count ()
     return cnt
 end
 
+function iter:sum ()
+    local sum = 0
+    for num in self.it do sum = sum + num end
+    return sum
+end
+
 return iter

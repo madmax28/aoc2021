@@ -90,7 +90,18 @@ function util.list_iter (list)
     local n = #list
     return function ()
         i = i + 1
-        if i <= n then return list[i] else return nil end
+        if i <= n then return list[i] end
+    end
+end
+
+function util.char_iter (str)
+    local i = 0
+    local n = str:len()
+    return function ()
+        i = i + 1
+        if i <= n then
+            return str:sub(i, i)
+        end
     end
 end
 

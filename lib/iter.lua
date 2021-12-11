@@ -55,6 +55,17 @@ function iter:filter (f)
     return self
 end
 
+function iter:enumerate ()
+    local idx = 0
+    local old = self.it
+    self.it = function ()
+        idx = idx + 1
+        local item = old()
+        if item then return idx, item end
+    end
+    return self
+end
+
 function iter:count ()
     local cnt = 0
     for _ in self.it do cnt = cnt + 1 end

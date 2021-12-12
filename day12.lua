@@ -22,25 +22,29 @@ local function contains (list, item)
     return false
 end
 
-local function dfs (path, revisit)
-    if path[#path] == "end" then return iter:new({ path }) end
+local function _dfs (path, revisit)
+    if path[#path] == "end" then return coroutine.yield(path) end
 
-    return coroutine.wrap(function ()
-        for _, neighbor in ipairs(graph.nodes[path[#path]].neighbors) do
-            if neighbor ~= "start" then
-                local visit, revisit = true, revisit
-                if graph.nodes[neighbor].small then
-                    visit = revisit or not contains(path, neighbor)
-                    revisit = revisit and not contains(path, neighbor)
-                end
+    for _, neighbor in ipairs(graph.nodes[path[#path]].neighbors) do
+        if neighbor ~= "start" then
+            local visit, revisit = true, revisit
+            if graph.nodes[neighbor].small then
+                visit = revisit or not contains(path, neighbor)
+                revisit = revisit and not contains(path, neighbor)
+            end
 
-                if visit then
-                    table.insert(path, neighbor)
-                    for p in dfs(path, revisit) do coroutine.yield(p) end
-                    table.remove(path, #path)
-                end
+            if visit then
+                table.insert(path, neighbor)
+                _dfs(path, revisit)
+                table.remove(path, #path)
             end
         end
+    end
+end
+
+local function dfs (path, revisit)
+    return coroutine.wrap(function ()
+        _dfs(path, revisit)
     end)
 end
 

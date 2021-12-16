@@ -1,4 +1,5 @@
 local iter = require "lib/iter"
+local priority_queue = require "lib/priority_queue"
 
 local grid = { grid = {} }
 local dim = 100
@@ -22,31 +23,23 @@ function grid:neighbors (x, y)
     end)
 end
 
-function grid:expand (risks, visited)
-    -- find best candidate
+function grid:expand (pq, visited)
     local x, y, risk
-    for xx, ys in pairs(risks) do
-        for yy, rrisk in pairs(ys) do
-            if not risk or risk > rrisk then
-                x, y, risk = xx, yy, rrisk
-            end
-        end
+    do
+        local cand
+        repeat
+            cand = pq:pop()
+        until not visited[cand.x] or not visited[cand.x][cand.y]
+        x, y, risk = cand.x, cand.y, cand.risk
     end
 
-    risks[x][y] = nil
     if not visited[x] then visited[x] = {} end
     visited[x][y] = true
 
     for neighbor in self:neighbors(x, y) do
         local nx, ny = neighbor.x, neighbor.y
         if not visited[nx] or not visited[nx][ny] then
-            local newrisk = risk + neighbor.risk
-            if risks[nx] and risks[nx][ny] then
-                newrisk = math.min(risks[nx][ny], newrisk)
-            end
-
-            if not risks[nx] then risks[nx] = {} end
-            risks[nx][ny] = newrisk
+            pq:insert({ x = nx, y = ny, risk = risk + neighbor.risk })
         end
     end
 
@@ -54,10 +47,13 @@ function grid:expand (risks, visited)
 end
 
 local function search ()
-    local risks, visited = { [1] = { [1] = 0 } }, {}
+    local pq = priority_queue:new({ { x = 1, y = 1, risk = 0 } }, function(a, b)
+        return a.risk < b.risk
+    end)
+    local visited = {}
     local x, y, risk
     while true do
-        x, y, risk = grid:expand(risks, visited)
+        x, y, risk = grid:expand(pq, visited)
         if x == dim and y == dim then return risk end
     end
 end

@@ -7,8 +7,7 @@ local hex2bin = {
 
 local packet = ""
 for hex in io.input("input/day16"):read():gmatch(".") do
-    local bin = hex2bin[hex]
-    for i = 1, 4 do packet = packet .. tonumber(bin:sub(i, i)) end
+    packet = packet .. hex2bin[hex]
 end
 
 local parser = { packet = packet, idx = 1, ver_sum = 0 }

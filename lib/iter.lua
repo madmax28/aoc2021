@@ -78,4 +78,10 @@ function iter:sum ()
     return sum
 end
 
+function iter:reduce (f)
+    local res = self.it()
+    for item in self.it do res = f(res, item) end
+    return res
+end
+
 return iter

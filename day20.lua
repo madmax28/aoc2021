@@ -73,7 +73,7 @@ function Map:step()
     end
     self.data = newmap.data
 
-    if self.default == "." then
+    if self.enhancement[1] == "#" and self.default == "." then
         self.default = "#"
     else
         self.default = "."
